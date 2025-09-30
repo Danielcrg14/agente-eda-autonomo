@@ -1,4 +1,4 @@
-# dashboard.py CORRIGIDO COM KEYS - PARTE 1: CABEÇALHO
+# dashboard.py CORRIGIDO PARA GITHUB - PARTE 1: CABEÇALHO
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -58,7 +58,7 @@ st.markdown("""
     <p style="color: white; margin: 0;">Análise Exploratória de Dados com Inteligência Artificial</p>
 </div>
 """, unsafe_allow_html=True)
-# dashboard.py CORRIGIDO COM KEYS - PARTE 2: FUNÇÕES COM KEYS ÚNICAS
+# dashboard.py CORRIGIDO PARA GITHUB - PARTE 2: FUNÇÕES
 
 def resetar_agente():
     """Reseta o agente para limpar cache entre análises"""
@@ -69,7 +69,7 @@ def resetar_agente():
         agente_eda.dataset_atual = None
         agente_eda.descobertas_memoria = []
         
-        # CORREÇÃO: Limpar APENAS grafico_atual.png
+        # Limpar gráfico atual
         if os.path.exists('grafico_atual.png'):
             try:
                 os.remove('grafico_atual.png')
@@ -134,6 +134,20 @@ def criar_sidebar():
     st.sidebar.markdown("- 📈 **Análise temporal**")
     st.sidebar.markdown("- 💬 **Q&A específico**")
     
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 💡 Tipos suportados:")
+    examples = [
+        "🏪 Dados de vendas",
+        "💳 Fraude/Segurança", 
+        "📱 Dados de marketing",
+        "🔬 Dados científicos",
+        "👥 Recursos humanos",
+        "📅 Séries temporais"
+    ]
+    
+    for example in examples:
+        st.sidebar.markdown(f"- {example}")
+    
     return uploaded_file
 
 def mostrar_metricas_dataset(resposta_agente):
@@ -149,7 +163,6 @@ def mostrar_metricas_dataset(resposta_agente):
     status = "Processando..."
     
     if resposta_agente:
-        # Extrair dados da resposta
         if "Linhas:" in resposta_agente:
             try:
                 linhas_texto = resposta_agente.split("Linhas:")[1].split("\n")[0].strip()
@@ -176,15 +189,13 @@ def mostrar_metricas_dataset(resposta_agente):
     
     with col1:
         st.metric(label="📋 Total de Linhas", value=linhas, delta="Dataset carregado")
-    
     with col2:
         st.metric(label="📊 Colunas", value=colunas, delta="Estruturadas")
-    
     with col3:
         st.metric(label="🔍 Tipo Detectado", value=tipo, delta="Auto-detecção")
-    
     with col4:
         st.metric(label="📈 Status", value=status, delta="Análise completa")
+        # dashboard.py CORRIGIDO PARA GITHUB - PARTE 3: EXIBIÇÃO
 
 def exibir_analise_principal(resposta):
     """Exibe a análise principal do agente"""
@@ -214,7 +225,7 @@ def exibir_analise_principal(resposta):
             st.markdown(insights)
 
 def exibir_graficos():
-    """Exibe APENAS o gráfico atual (SEM BOTÕES DUPLICADOS)"""
+    """Exibe APENAS o gráfico atual"""
     st.markdown("## 📈 Visualizações Automáticas")
     
     if os.path.exists('grafico_atual.png'):
@@ -228,17 +239,9 @@ def exibir_graficos():
             - 🚨 **Fraude**: Distribuição classes + valores
             - 🔬 **Científico**: Scatter plots + classificações
             - 📊 **Geral**: Correlações + distribuições
-            
-            O agente escolhe automaticamente a visualização mais apropriada.
             """)
     else:
         st.info("📊 Aguardando gráfico do agente...")
-        st.markdown("""
-        **O agente criará visualizações automaticamente:**
-        1. 🔍 Detecta tipo de dados
-        2. 📊 Escolhe gráfico apropriado  
-        3. 🎨 Cria visualização específica
-        """)
 
 def secao_perguntas():
     """Seção para perguntas personalizadas"""
@@ -247,8 +250,8 @@ def secao_perguntas():
     
     exemplos_perguntas = [
         "Sobre o que é esta tabela?",
-        "Qual a média da coluna Sales?",
-        "Quais são os outliers da coluna Amount?",
+        "Qual a média da primeira coluna numérica?",
+        "Quais são os outliers das principais colunas?",
         "Detecte agrupamentos nos dados",
         "Crie um gráfico de correlação"
     ]
@@ -263,7 +266,7 @@ def secao_perguntas():
     pergunta_usuario = st.text_area(
         "🤔 Sua pergunta:",
         value=pergunta_default,
-        placeholder="Ex: Qual a distribuição da coluna X?",
+        placeholder="Ex: Qual a distribuição da coluna X? Quais outliers de Y?",
         height=100
     )
     
@@ -284,7 +287,7 @@ def secao_perguntas():
     return None
 
 def pagina_inicial():
-    """Página inicial"""
+    """Página inicial SEM dependência de dataset local"""
     st.markdown("""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 padding: 2rem; border-radius: 15px; text-align: center; margin-bottom: 2rem;">
@@ -299,92 +302,100 @@ def pagina_inicial():
     
     with col1:
         st.markdown("""
-        ### 🧠 Inteligência
+        ### 🧠 Inteligência Artificial
         - **8 ferramentas** especializadas
         - **Detecção automática** de tipos
-        - **Q&A específico**
+        - **Q&A específico** para qualquer pergunta
+        - **Análises contextualizadas** por domínio
         """)
     
     with col2:
         st.markdown("""
-        ### 📊 Análises
-        - **Estatísticas** completas
-        - **Outliers** (IQR)
-        - **Clustering** (K-means)
+        ### 📊 Análises Avançadas
+        - **Estatísticas descritivas** completas
+        - **Detecção de outliers** (método IQR)
+        - **Clustering automático** (K-means)
+        - **Análise temporal** e correlações
         """)
     
     with col3:
         st.markdown("""
-        ### 💬 Perguntas
-        - **"Sobre a tabela?"**
-        - **"Média da coluna X?"**
-        - **"Outliers de Y?"**
+        ### 💬 Perguntas Específicas
+        - **"Sobre o que é a tabela?"**
+        - **"Qual a média da coluna X?"**
+        - **"Quais outliers de Y?"**
+        - **"Detecte clusters nos dados"**
         """)
     
+    # Como usar
     st.markdown("---")
-    col1, col2 = st.columns([2, 1])
+    st.markdown("## 🚀 Como Usar Este Agente")
     
-    with col1:
-        st.markdown("""
-        **Demonstração com dataset de fraude:**
-        - 📊 284.807 transações
-        - 🎯 Todas as capacidades
-        """)
+    steps = [
+        ("1️⃣", "**Upload do CSV**", "Faça upload de qualquer arquivo CSV na barra lateral"),
+        ("2️⃣", "**Análise Automática**", "Agente detecta tipo e faz análise apropriada"),
+        ("3️⃣", "**Visualização Única**", "Um gráfico específico criado para seus dados"),
+        ("4️⃣", "**Perguntas Específicas**", "Faça qualquer pergunta sobre EDA")
+    ]
     
-    with col2:
-        if st.button("🧪 Demonstrar", type="primary", key="btn_demo_inicial"):
-            return "demo"
+    cols = st.columns(4)
+    for i, (emoji, titulo, desc) in enumerate(steps):
+        with cols[i]:
+            st.markdown(f"""
+            <div style="text-align: center; padding: 1rem; 
+                        background: #f8f9fa; border-radius: 10px; height: 150px;">
+                <div style="font-size: 3rem;">{emoji}</div>
+                <h4 style="margin: 0.5rem 0;">{titulo}</h4>
+                <p style="font-size: 0.9rem; margin: 0;">{desc}</p>
+            </div>
+            """, unsafe_allow_html=True)
     
-    return None
-
-def executar_demonstracao():
-    """Demonstração com dataset de exemplo"""
-    st.markdown("## 🧪 Demonstração")
-    
-    with st.spinner("🔄 Resetando..."):
-        perguntar_ao_agente_func, reset_ok = resetar_agente()
-    
-    if reset_ok:
-        st.success("✅ Agente resetado!")
-    
-    with st.spinner('🧠 Analisando exemplo...'):
-        resposta = perguntar_ao_agente_func("Carregue o arquivo data/creditcard.csv e faça análise completa com gráficos")
-    
-    mostrar_metricas_dataset(resposta)
-    exibir_analise_principal(resposta)
-    exibir_graficos()
-    
+    # Exemplos de uso
     st.markdown("---")
-    st.markdown("## 💬 Teste Perguntas")
+    st.markdown("## 💡 Exemplos de Uso")
     
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("❓ Sobre esta tabela?", key="btn_demo_contexto"):
-            with st.spinner('🤔 Respondendo...'):
-                resposta_contexto = perguntar_ao_agente_func("Sobre o que é esta tabela?")
-            st.markdown("### 🤖 Resposta:")
-            st.markdown(resposta_contexto)
+        st.markdown("""
+        ### 📊 Tipos de CSV Suportados:
+        - **🏪 Vendas**: sales, product, revenue
+        - **🚨 Fraude**: class, fraud, amount
+        - **🔬 Científico**: species, petal, sepal
+        - **👥 RH**: salary, employee, department
+        - **🏥 Médico**: age, pressure, diagnosis
+        - **📈 Financeiro**: price, stock, investment
+        """)
     
     with col2:
-        if st.button("❓ Média da coluna Amount?", key="btn_demo_media"):
-            with st.spinner('🤔 Calculando...'):
-                resposta_media = perguntar_ao_agente_func("Qual a média da coluna Amount?")
-            st.markdown("### 🤖 Resposta:")
-            st.markdown(resposta_media)
+        st.markdown("""
+        ### 🎯 Análises Automáticas:
+        - **Estatísticas descritivas** completas
+        - **Detecção de outliers** (método IQR)
+        - **Clustering** automático (K-means)
+        - **Correlações** entre variáveis
+        - **Gráficos adaptativos** por tipo
+        - **Insights contextualizados**
+        """)
     
-    pergunta = secao_perguntas()
+    # Instruções de uso
+    st.markdown("---")
+    st.markdown("### 🎮 Instruções de Uso:")
     
-    if pergunta:
-        st.markdown("### 🤖 Resposta:")
-        with st.spinner('🤔 Pensando...'):
-            resposta_personalizada = perguntar_ao_agente_func(pergunta)
-        st.markdown(resposta_personalizada)
-        exibir_graficos()
-        # dashboard.py CORRIGIDO COM KEYS - PARTE 4: MAIN FUNCTION
+    st.info("""
+    👈 **COMECE AGORA:** Faça upload de um arquivo CSV na barra lateral!
+    
+    O agente irá automaticamente:
+    1. 🔍 **Detectar** o tipo dos seus dados
+    2. 📊 **Analisar** com métodos apropriados
+    3. 🎨 **Criar** visualizações específicas
+    4. 💬 **Responder** suas perguntas sobre os dados
+    """)
+    
+    return None
 
 def main():
-    """Função principal do dashboard"""
+    """Função principal do dashboard (SEM DEPENDÊNCIA DE DATASET LOCAL)"""
     
     # Inicializar session state
     if 'pergunta_selecionada' not in st.session_state:
@@ -427,9 +438,9 @@ def main():
             
             # Seção de perguntas personalizadas
             st.markdown("---")
-            st.markdown("## 💬 Faça Perguntas Específicas")
+            st.markdown("## 💬 Faça Perguntas Específicas sobre Seus Dados")
             
-            # Perguntas rápidas com KEYS ÚNICAS
+            # Perguntas rápidas
             col1, col2, col3 = st.columns(3)
             
             with col1:
@@ -445,7 +456,6 @@ def main():
                         resposta_clusters = perguntar_ao_agente_func("Detecte agrupamentos nos dados")
                     st.markdown("### 🤖 Análise de Clusters:")
                     st.markdown(resposta_clusters)
-                    # Atualizar gráficos após clusters
                     exibir_graficos()
             
             with col3:
@@ -472,11 +482,8 @@ def main():
                 os.remove(temp_path)
     
     else:
-        # Nenhum arquivo carregado - mostrar página inicial
-        acao = pagina_inicial()
-        
-        if acao == "demo":
-            executar_demonstracao()
+        # CORRIGIDO: Página inicial SEM botão de demo que depende de arquivo local
+        pagina_inicial()
 
 # ===== EXECUÇÃO PRINCIPAL =====
 
@@ -490,10 +497,13 @@ st.markdown("""
     <p>🤖 <strong>Agente EDA Autônomo</strong> - Desenvolvido com ❤️ usando Streamlit e LangChain</p>
     <p>📊 Análise Exploratória de Dados com Inteligência Artificial</p>
     <p style="font-size: 0.8rem; margin-top: 0.5rem;">
-        🎯 <em>Sistema com gráfico único por análise - sem mistura de contextos</em>
+        🎯 <em>Faça upload de qualquer CSV e veja a magia acontecer!</em>
     </p>
     <p style="font-size: 0.8rem;">
-        💬 <em>Faça perguntas específicas sobre qualquer aspecto dos dados</em>
+        💬 <em>Perguntas específicas: "Média de X?", "Outliers de Y?", "Sobre a tabela?"</em>
+    </p>
+    <p style="font-size: 0.8rem;">
+        🌐 <em>Sistema online - pronto para qualquer CSV!</em>
     </p>
 </div>
 """, unsafe_allow_html=True)
